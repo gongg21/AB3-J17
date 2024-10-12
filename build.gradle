@@ -25,6 +25,19 @@ test {
     finalizedBy jacocoTestReport
 }
 
+task cucumberTest(type: Test) {
+    useJUnit()
+
+    // Only run Cucumber test classes
+    include '**/RunCucumberTests*'
+
+    // Specify the glue and feature paths for Cucumber
+    systemProperty "cucumber.features", "src/test/resources/features"
+    systemProperty "cucumber.glue", "stepdefinitions"
+
+    finalizedBy jacocoTestReport
+}
+
 task coverage(type: JacocoReport) {
     sourceDirectories.from files(sourceSets.main.allSource.srcDirs)
     classDirectories.from files(sourceSets.main.output)
@@ -41,7 +54,7 @@ task coverage(type: JacocoReport) {
 }
 
 dependencies {
-    String jUnitVersion = '5.4.0'
+    String jUnitVersion = '5.11.2'
     String javaFxVersion = '17.0.7'
 
     implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'win'
@@ -61,6 +74,9 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.7.4'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: jUnitVersion
+    testImplementation 'io.cucumber:cucumber-java:7.20.1'
+    testImplementation 'io.cucumber:cucumber-junit:7.20.1'
+    testImplementation 'junit:junit:4.13.2'
 
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: jUnitVersion
 }
